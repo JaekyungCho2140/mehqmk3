@@ -53,7 +53,7 @@ public partial class TranslationEditorViewModel : ObservableObject
     {
         var dialog = new Microsoft.Win32.OpenFileDialog
         {
-            Filter = "XLIFF Files (*.xlf;*.xliff)|*.xlf;*.xliff|All Files (*.*)|*.*",
+            Filter = "All Supported|*.xlf;*.xliff;*.docx;*.html;*.htm;*.txt|XLIFF|*.xlf;*.xliff|Word Documents|*.docx|HTML|*.html;*.htm|Plain Text|*.txt|All Files|*.*",
             Title = "Open Translation Document"
         };
 
