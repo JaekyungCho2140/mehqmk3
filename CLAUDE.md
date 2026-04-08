@@ -4,10 +4,15 @@
 Windows 전용 CAT(Computer-Assisted Translation) 도구. memoQ의 로컬 데스크톱 기능 클론.
 
 ## Tech Stack
-- .NET 8 (LTS), WPF, MVVM + Clean Architecture
-- SQLite (via EF Core) for TM/TB storage
-- WiX Toolset v4 for installer
-- GitHub Actions for CI/CD
+- .NET 8 (LTS), WPF, MVVM (CommunityToolkit.Mvvm) + Clean Architecture
+- SQLite (via EF Core 8) for TM/TB storage
+- Fluent.Ribbon v11 for ribbon menu
+- AvalonDock (Dirkster99) v4.72 for docking panels
+- Velopack for auto-update
+- WiX Toolset v5 for installer
+- FlaUI (UIA3) for UI automation tests
+- xUnit + Moq + FluentAssertions for unit tests
+- GitHub Actions (windows-latest) for CI/CD
 
 ## Project Structure
 ```
