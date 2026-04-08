@@ -45,9 +45,11 @@ tests/
 ### Sprint Workflow
 1. **스프린트 시작**: Jira에서 에픽 아래 스토리/작업 확인 → feature 브랜치 생성
 2. **개발**: 코드 작성 + 테스트 → 커밋 (conventional commits, Jira 키 참조)
-3. **CI 검증**: GitHub Actions에서 빌드/테스트 통과 확인
-4. **PR + 머지**: `gh pr create` → main 머지 → Jira 이슈 상태 업데이트
+3. **CI 검증**: GitHub Actions에서 빌드/테스트 통과 확인 (push 트리거)
+4. **머지**: CI 통과 후 main에 직접 머지 → Jira 이슈 상태 업데이트
 5. **스프린트 리뷰**: 사용자가 Windows에서 앱 실행 + UI 피드백
+
+> PR은 사용하지 않음 — 작업자가 Claude 단독이므로 셀프 리뷰 불필요. CI push 트리거로 검증 충분.
 
 ### Session Handoff Strategy
 새 세션 시작 시 현재 상태를 파악하는 순서:
