@@ -77,10 +77,11 @@ tests/
 | MEHQ-16 | E6: File Formats | S2-3 (W3-6) |
 | MEHQ-17 | E7: QA System | S7 (W13-14) |
 | MEHQ-18 | E8: LiveDocs | S8 (W15-16) |
-| MEHQ-19 | E9: Muse | S9 (W17-18) |
-| MEHQ-20 | E10: Installer | S10 (W19-20) |
+| ~~MEHQ-19~~ | ~~E9: Muse~~ | ~~DROPPED~~ |
+| MEHQ-20 | E10: Installer | S9 (W17-18) |
 
 ## Out of Scope
 - Server/TMS/Network features
+- Muse (predictive typing) — dropped from scope
 - Machine Translation (MT)
 - Cloud/Web access
