@@ -72,7 +72,9 @@ $RECYCLE.BIN/
 
 ## User-specific
 *.env
-*.local
+
+## Hookify rules (local only)
+.claude/*.local.md
 
 ## WiX
 *.wixobj

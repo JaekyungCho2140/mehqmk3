@@ -1,0 +1,42 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore mehQ.sln
+
+      - name: Build Release
+        run: dotnet build mehQ.sln --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test mehQ.sln --configuration Release --no-restore
+
+      - name: Publish
+        run: dotnet publish src/MehQ.UI/MehQ.UI.csproj --configuration Release --output ./publish --self-contained false
+
+      - name: Create Release Archive
+        run: Compress-Archive -Path ./publish/* -DestinationPath ./mehQ-${{ github.ref_name }}.zip
+        shell: pwsh
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ./mehQ-${{ github.ref_name }}.zip
+          generate_release_notes: true
