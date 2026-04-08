@@ -13,9 +13,15 @@ public class SegmentStatusTests
     }
 
     [Fact]
-    public void Confirmed_ShouldBeFour()
+    public void TranslatorConfirmed_ShouldBeFour()
     {
-        ((int)SegmentStatus.Confirmed).Should().Be(4);
+        ((int)SegmentStatus.TranslatorConfirmed).Should().Be(4);
+    }
+
+    [Fact]
+    public void Locked_ShouldBeEight()
+    {
+        ((int)SegmentStatus.Locked).Should().Be(8);
     }
 
     [Fact]
@@ -24,10 +30,13 @@ public class SegmentStatusTests
         Enum.GetNames<SegmentStatus>().Should().Contain(new[]
         {
             "NotStarted",
-            "Draft",
-            "Translated",
-            "Reviewed",
-            "Confirmed",
+            "Edited",
+            "PreTranslated",
+            "FragmentAssembled",
+            "TranslatorConfirmed",
+            "Reviewer1Confirmed",
+            "Reviewer2Confirmed",
+            "Rejected",
             "Locked"
         });
     }

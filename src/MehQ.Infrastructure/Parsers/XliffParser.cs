@@ -81,20 +81,24 @@ public class XliffParser : IFileParser
 
     private static SegmentStatus MapState(string? state) => state switch
     {
-        "translated" => SegmentStatus.Translated,
-        "reviewed" => SegmentStatus.Reviewed,
-        "final" => SegmentStatus.Confirmed,
-        "signed-off" => SegmentStatus.Confirmed,
+        "translated" => SegmentStatus.TranslatorConfirmed,
+        "reviewed" => SegmentStatus.Reviewer1Confirmed,
+        "final" => SegmentStatus.Reviewer2Confirmed,
+        "signed-off" => SegmentStatus.Reviewer2Confirmed,
+        "needs-translation" => SegmentStatus.Edited,
         _ => SegmentStatus.NotStarted
     };
 
     private static string MapStatusToState(SegmentStatus status) => status switch
     {
         SegmentStatus.NotStarted => "new",
-        SegmentStatus.Draft => "needs-translation",
-        SegmentStatus.Translated => "translated",
-        SegmentStatus.Reviewed => "reviewed",
-        SegmentStatus.Confirmed => "final",
+        SegmentStatus.Edited => "needs-translation",
+        SegmentStatus.PreTranslated => "translated",
+        SegmentStatus.FragmentAssembled => "translated",
+        SegmentStatus.TranslatorConfirmed => "translated",
+        SegmentStatus.Reviewer1Confirmed => "reviewed",
+        SegmentStatus.Reviewer2Confirmed => "final",
+        SegmentStatus.Rejected => "needs-translation",
         SegmentStatus.Locked => "final",
         _ => "new"
     };

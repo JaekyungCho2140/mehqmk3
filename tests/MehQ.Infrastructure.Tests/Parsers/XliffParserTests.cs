@@ -74,8 +74,8 @@ public class XliffParserTests : IDisposable
         var segments = await _parser.ParseAsync(filePath);
 
         segments.Should().HaveCount(3);
-        segments[0].Status.Should().Be(SegmentStatus.Translated);
-        segments[1].Status.Should().Be(SegmentStatus.Confirmed);
+        segments[0].Status.Should().Be(SegmentStatus.TranslatorConfirmed);
+        segments[1].Status.Should().Be(SegmentStatus.Reviewer2Confirmed);
         segments[2].Status.Should().Be(SegmentStatus.NotStarted);
     }
 
@@ -132,17 +132,17 @@ public class XliffParserTests : IDisposable
 
         var segments = await _parser.ParseAsync(filePath);
         segments[0].Target = "Hola";
-        segments[0].Status = SegmentStatus.Translated;
+        segments[0].Status = SegmentStatus.TranslatorConfirmed;
         segments[1].Target = "Mundo";
-        segments[1].Status = SegmentStatus.Confirmed;
+        segments[1].Status = SegmentStatus.Reviewer2Confirmed;
 
         await _parser.SaveAsync(filePath, segments.ToList());
 
         var reloaded = await _parser.ParseAsync(filePath);
         reloaded[0].Target.Should().Be("Hola");
-        reloaded[0].Status.Should().Be(SegmentStatus.Translated);
+        reloaded[0].Status.Should().Be(SegmentStatus.TranslatorConfirmed);
         reloaded[1].Target.Should().Be("Mundo");
-        reloaded[1].Status.Should().Be(SegmentStatus.Confirmed);
+        reloaded[1].Status.Should().Be(SegmentStatus.Reviewer2Confirmed);
     }
 
     [Fact]
