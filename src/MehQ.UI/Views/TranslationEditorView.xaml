@@ -1,0 +1,161 @@
+<UserControl x:Class="MehQ.UI.Views.TranslationEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:MehQ.UI.ViewModels"
+             Background="White">
+
+    <UserControl.Resources>
+        <!-- Segment status color converter would go here in future -->
+        <Style x:Key="SegmentGridStyle" TargetType="DataGrid">
+            <Setter Property="AutoGenerateColumns" Value="False" />
+            <Setter Property="CanUserAddRows" Value="False" />
+            <Setter Property="CanUserDeleteRows" Value="False" />
+            <Setter Property="SelectionMode" Value="Single" />
+            <Setter Property="SelectionUnit" Value="FullRow" />
+            <Setter Property="GridLinesVisibility" Value="Horizontal" />
+            <Setter Property="HorizontalGridLinesBrush" Value="#E0E0E0" />
+            <Setter Property="RowHeight" Value="40" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="BorderThickness" Value="0" />
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Toolbar -->
+        <Border Grid.Row="0" Background="#F5F5F5" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="8,4">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Open" Command="{Binding OpenDocumentCommand}" Padding="10,4" Margin="0,0,5,0" />
+                <Button Content="Save" Command="{Binding SaveDocumentCommand}" Padding="10,4" Margin="0,0,5,0" />
+                <Separator Margin="5,0" />
+                <Button Content="Confirm (Ctrl+Enter)" Command="{Binding ConfirmSegmentCommand}"
+                        Padding="10,4" Margin="0,0,5,0"
+                        Background="#4CAF50" Foreground="White" BorderThickness="0" />
+                <Button Content="Mark Translated" Command="{Binding MarkTranslatedCommand}"
+                        Padding="10,4" Margin="0,0,5,0" />
+                <Separator Margin="5,0" />
+                <TextBlock Text="{Binding DocumentTitle}" VerticalAlignment="Center"
+                           FontWeight="SemiBold" Foreground="#333" />
+            </StackPanel>
+        </Border>
+
+        <!-- Segment Grid -->
+        <DataGrid Grid.Row="1"
+                  Style="{StaticResource SegmentGridStyle}"
+                  ItemsSource="{Binding Segments}"
+                  SelectedItem="{Binding SelectedSegment, Mode=TwoWay}">
+
+            <DataGrid.Columns>
+                <!-- Row Number -->
+                <DataGridTextColumn Header="#" Width="45" IsReadOnly="True"
+                                    Binding="{Binding SequenceNumber}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="Foreground" Value="Gray" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Status Icon -->
+                <DataGridTextColumn Header="Status" Width="60" IsReadOnly="True"
+                                    Binding="{Binding Status}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                            <Setter Property="FontSize" Value="11" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Status}" Value="NotStarted">
+                                    <Setter Property="Text" Value="--" />
+                                    <Setter Property="Foreground" Value="LightGray" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Status}" Value="Draft">
+                                    <Setter Property="Text" Value="Draft" />
+                                    <Setter Property="Foreground" Value="Orange" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Status}" Value="Translated">
+                                    <Setter Property="Text" Value="T" />
+                                    <Setter Property="Foreground" Value="#2196F3" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Status}" Value="Confirmed">
+                                    <Setter Property="Text" Value="C" />
+                                    <Setter Property="Foreground" Value="#4CAF50" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Source Text -->
+                <DataGridTextColumn Header="Source" Width="*" IsReadOnly="True"
+                                    Binding="{Binding Source}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="Padding" Value="5,8" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <!-- Target Text (editable) -->
+                <DataGridTextColumn Header="Target" Width="*"
+                                    Binding="{Binding Target, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="Padding" Value="5,8" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="TextBox">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="AcceptsReturn" Value="False" />
+                            <Setter Property="Padding" Value="5,8" />
+                            <Setter Property="Background" Value="#FFF8E1" />
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLocked}" Value="True">
+                            <Setter Property="Background" Value="#F0F0F0" />
+                            <Setter Property="IsEnabled" Value="False" />
+                        </DataTrigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#E3F2FD" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+
+        <!-- Statistics Bar -->
+        <Border Grid.Row="2" Background="#F5F5F5" BorderBrush="#E0E0E0" BorderThickness="0,1,0,0" Padding="10,6">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="0,0,20,0">
+                    <Run Text="Total: " Foreground="Gray" />
+                    <Run Text="{Binding TotalSegments, Mode=OneWay}" FontWeight="SemiBold" />
+                </TextBlock>
+                <TextBlock Margin="0,0,20,0">
+                    <Run Text="Translated: " Foreground="#2196F3" />
+                    <Run Text="{Binding TranslatedSegments, Mode=OneWay}" FontWeight="SemiBold" />
+                </TextBlock>
+                <TextBlock Margin="0,0,20,0">
+                    <Run Text="Confirmed: " Foreground="#4CAF50" />
+                    <Run Text="{Binding ConfirmedSegments, Mode=OneWay}" FontWeight="SemiBold" />
+                </TextBlock>
+                <TextBlock>
+                    <Run Text="{Binding StatusText, Mode=OneWay}" Foreground="Gray" />
+                </TextBlock>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

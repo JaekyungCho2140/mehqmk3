@@ -4,13 +4,10 @@
                      xmlns:Fluent="urn:fluent-ribbon"
                      xmlns:avalonDock="https://github.com/Dirkster99/AvalonDock"
                      xmlns:vm="clr-namespace:MehQ.UI.ViewModels"
+                     xmlns:views="clr-namespace:MehQ.UI.Views"
                      Title="mehQ — Computer-Assisted Translation"
                      Width="1280" Height="800"
                      WindowStartupLocation="CenterScreen">
-
-    <Fluent:RibbonWindow.DataContext>
-        <vm:MainViewModel />
-    </Fluent:RibbonWindow.DataContext>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -112,6 +109,9 @@
                     <avalonDock:LayoutDocumentPane>
                         <avalonDock:LayoutDocument Title="Dashboard" CanClose="False">
                             <ContentControl Content="{Binding CurrentView}" />
+                        </avalonDock:LayoutDocument>
+                        <avalonDock:LayoutDocument Title="Translation Editor" CanClose="False">
+                            <views:TranslationEditorView DataContext="{Binding EditorViewModel}" />
                         </avalonDock:LayoutDocument>
                     </avalonDock:LayoutDocumentPane>
 
