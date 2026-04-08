@@ -10,6 +10,7 @@ public class Segment
     public string Source { get; set; } = string.Empty;
     public string Target { get; set; } = string.Empty;
     public SegmentStatus Status { get; set; } = SegmentStatus.NotStarted;
+    public int MatchRate { get; set; } // 0-102, where 101=context match, 102=double context
     public bool IsLocked { get; set; }
     public string? Comment { get; set; }
     public TranslationDocument? Document { get; set; }

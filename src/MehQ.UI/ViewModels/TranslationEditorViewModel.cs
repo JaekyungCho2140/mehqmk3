@@ -32,6 +32,15 @@ public partial class TranslationEditorViewModel : ObservableObject
     [ObservableProperty]
     private int _confirmedSegments;
 
+    [ObservableProperty]
+    private int _editedSegments;
+
+    [ObservableProperty]
+    private int _emptySegments;
+
+    [ObservableProperty]
+    private int _preTranslatedSegments;
+
     public ObservableCollection<Segment> Segments { get; } = [];
 
     public TranslationEditorViewModel(IDocumentService documentService)
@@ -95,6 +104,7 @@ public partial class TranslationEditorViewModel : ObservableObject
         }
     }
 
+    // Keyboard shortcut: Ctrl+Enter
     [RelayCommand]
     private void ConfirmSegment()
     {
@@ -102,12 +112,13 @@ public partial class TranslationEditorViewModel : ObservableObject
 
         if (!string.IsNullOrWhiteSpace(SelectedSegment.Target))
         {
-            SelectedSegment.Status = SegmentStatus.Confirmed;
+            SelectedSegment.Status = SegmentStatus.TranslatorConfirmed;
             UpdateStats();
             MoveToNextSegment();
         }
     }
 
+    // Keyboard shortcut: Ctrl+E
     [RelayCommand]
     private void MarkTranslated()
     {
@@ -115,9 +126,30 @@ public partial class TranslationEditorViewModel : ObservableObject
 
         if (!string.IsNullOrWhiteSpace(SelectedSegment.Target))
         {
-            SelectedSegment.Status = SegmentStatus.Translated;
+            SelectedSegment.Status = SegmentStatus.TranslatorConfirmed;
             UpdateStats();
         }
+    }
+
+    // Keyboard shortcut: Ctrl+Shift+C — copy source text to target
+    [RelayCommand]
+    private void CopySourceToTarget()
+    {
+        if (SelectedSegment == null) return;
+
+        SelectedSegment.Target = SelectedSegment.Source;
+        SelectedSegment.Status = SegmentStatus.Edited;
+        UpdateStats();
+    }
+
+    // Keyboard shortcut: Ctrl+Shift+R — reject segment (reviewer action)
+    [RelayCommand]
+    private void RejectSegment()
+    {
+        if (SelectedSegment == null) return;
+
+        SelectedSegment.Status = SegmentStatus.Rejected;
+        UpdateStats();
     }
 
     private void MoveToNextSegment()
@@ -133,7 +165,10 @@ public partial class TranslationEditorViewModel : ObservableObject
     private void UpdateStats()
     {
         TotalSegments = Segments.Count;
-        TranslatedSegments = Segments.Count(s => s.Status >= SegmentStatus.Translated);
-        ConfirmedSegments = Segments.Count(s => s.Status >= SegmentStatus.Confirmed);
+        EmptySegments = Segments.Count(s => s.Status == SegmentStatus.NotStarted);
+        EditedSegments = Segments.Count(s => s.Status == SegmentStatus.Edited);
+        PreTranslatedSegments = Segments.Count(s => s.Status == SegmentStatus.PreTranslated);
+        TranslatedSegments = Segments.Count(s => s.Status >= SegmentStatus.TranslatorConfirmed);
+        ConfirmedSegments = Segments.Count(s => s.Status >= SegmentStatus.TranslatorConfirmed);
     }
 }

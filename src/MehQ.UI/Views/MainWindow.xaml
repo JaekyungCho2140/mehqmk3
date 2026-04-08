@@ -18,13 +18,16 @@
 
         <!-- Ribbon Menu -->
         <Fluent:Ribbon Grid.Row="0">
+            <!-- Backstage (memoQ application menu) -->
             <Fluent:Ribbon.Menu>
-                <Fluent:Backstage>
+                <Fluent:Backstage Header="memoQ">
                     <Fluent:BackstageTabControl>
                         <Fluent:BackstageTabItem Header="New Project" />
                         <Fluent:BackstageTabItem Header="Open Project" />
+                        <Fluent:BackstageTabItem Header="Recent Projects" />
                         <Fluent:SeparatorTabItem />
                         <Fluent:BackstageTabItem Header="Settings" />
+                        <Fluent:BackstageTabItem Header="About mehQ" />
                     </Fluent:BackstageTabControl>
                 </Fluent:Backstage>
             </Fluent:Ribbon.Menu>
@@ -33,15 +36,13 @@
             <Fluent:RibbonTabItem Header="Project">
                 <Fluent:RibbonGroupBox Header="Project">
                     <Fluent:Button Header="New"
-                                   Icon="pack://application:,,,/MehQ.UI;component/Resources/Icons/new-project.png"
-                                   LargeIcon="pack://application:,,,/MehQ.UI;component/Resources/Icons/new-project.png"
                                    SizeDefinition="Large" />
                     <Fluent:Button Header="Open"
                                    SizeDefinition="Large" />
                     <Fluent:Button Header="Close"
                                    SizeDefinition="Large" />
                 </Fluent:RibbonGroupBox>
-                <Fluent:RibbonGroupBox Header="Documents">
+                <Fluent:RibbonGroupBox Header="Import/Export">
                     <Fluent:Button Header="Import"
                                    SizeDefinition="Large" />
                     <Fluent:Button Header="Export"
@@ -49,83 +50,188 @@
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
 
-            <!-- Home Tab -->
-            <Fluent:RibbonTabItem Header="Home">
-                <Fluent:RibbonGroupBox Header="Navigation">
-                    <Fluent:Button Header="Dashboard"
-                                   SizeDefinition="Large"
-                                   Command="{Binding ShowDashboardCommand}" />
+            <!-- Documents Tab -->
+            <Fluent:RibbonTabItem Header="Documents">
+                <Fluent:RibbonGroupBox Header="Documents">
+                    <Fluent:Button Header="Import"
+                                   SizeDefinition="Large" />
+                    <Fluent:Button Header="Translate"
+                                   SizeDefinition="Large" />
+                    <Fluent:Button Header="Export"
+                                   SizeDefinition="Large" />
+                    <Fluent:Button Header="Remove"
+                                   SizeDefinition="Large" />
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Reimport/Review">
+                    <Fluent:Button Header="Reimport"
+                                   SizeDefinition="Middle" />
+                    <Fluent:Button Header="X-Translate"
+                                   SizeDefinition="Middle" />
+                    <Fluent:Button Header="Monolingual Review"
+                                   SizeDefinition="Middle" />
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Statistics">
+                    <Fluent:Button Header="Statistics"
+                                   SizeDefinition="Large" />
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+
+            <!-- Preparation Tab -->
+            <Fluent:RibbonTabItem Header="Preparation">
+                <Fluent:RibbonGroupBox Header="Pre-Translation">
+                    <Fluent:Button Header="Pre-Translate"
+                                   SizeDefinition="Large" />
+                    <Fluent:Button Header="Confirm/Update"
+                                   SizeDefinition="Large" />
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Operations">
-                    <Fluent:Button Header="Confirm"
+                    <Fluent:Button Header="Copy Source"
                                    SizeDefinition="Middle" />
-                    <Fluent:Button Header="Pre-Translate"
+                    <Fluent:Button Header="Pseudo-Translate"
                                    SizeDefinition="Middle" />
-                    <Fluent:Button Header="Run QA"
+                    <Fluent:Button Header="Export Bilingual"
                                    SizeDefinition="Middle" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
 
-            <!-- Translation Memories Tab -->
-            <Fluent:RibbonTabItem Header="Translation Memories">
-                <Fluent:RibbonGroupBox Header="TM">
-                    <Fluent:Button Header="Create TM"
+            <!-- View Tab -->
+            <Fluent:RibbonTabItem Header="View">
+                <Fluent:RibbonGroupBox Header="Layout">
+                    <Fluent:Button Header="Default Layout"
+                                   SizeDefinition="Middle" />
+                    <Fluent:Button Header="Results on Top"
+                                   SizeDefinition="Middle" />
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Panels">
+                    <Fluent:Button Header="Project Home"
                                    SizeDefinition="Large" />
-                    <Fluent:Button Header="Import TMX"
+                    <Fluent:ToggleButton Header="View Pane"
+                                         SizeDefinition="Large" />
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+
+            <!-- Workflow Tab -->
+            <Fluent:RibbonTabItem Header="Workflow">
+                <Fluent:RibbonGroupBox Header="Workflow">
+                    <Fluent:Button Header="Assign"
                                    SizeDefinition="Large" />
+                    <Fluent:Button Header="Deliver"
+                                   SizeDefinition="Large" />
+                </Fluent:RibbonGroupBox>
+            </Fluent:RibbonTabItem>
+
+            <!-- Translation Contextual Tab (visible when editor is open) -->
+            <Fluent:RibbonTabItem Header="Translation" Group="{Binding ElementName=TranslationContextualGroup}">
+                <Fluent:RibbonGroupBox Header="Segment">
+                    <Fluent:Button Header="Edit Source"
+                                   SizeDefinition="Middle" />
+                    <Fluent:Button Header="Revert Source"
+                                   SizeDefinition="Middle" />
+                    <Fluent:Button Header="Lock/Unlock"
+                                   SizeDefinition="Middle" />
+                    <Fluent:Button Header="Scan Segment"
+                                   SizeDefinition="Middle" />
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Translation Hits">
+                    <Fluent:Button Header="Insert Selected Hit"
+                                   SizeDefinition="Large" />
+                    <Fluent:Button Header="Change Current Hit"
+                                   SizeDefinition="Middle" />
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Search">
                     <Fluent:Button Header="Concordance"
                                    SizeDefinition="Large" />
+                    <Fluent:Button Header="Look Up Term"
+                                   SizeDefinition="Middle" />
+                    <Fluent:Button Header="Web Search"
+                                   SizeDefinition="Middle" />
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Store">
+                    <Fluent:Button Header="Confirm"
+                                   SizeDefinition="Large" />
+                    <Fluent:Button Header="Add Term"
+                                   SizeDefinition="Middle" />
+                    <Fluent:Button Header="Quick Add Term"
+                                   SizeDefinition="Middle" />
+                    <Fluent:Button Header="Add Non-Translatable"
+                                   SizeDefinition="Middle" />
+                </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="Comments And Proofing">
+                    <Fluent:Button Header="Mark Text"
+                                   SizeDefinition="Middle" />
+                    <Fluent:Button Header="Comments"
+                                   SizeDefinition="Middle" />
+                    <Fluent:Button Header="Spelling/Grammar"
+                                   SizeDefinition="Middle" />
+                    <Fluent:Button Header="Errors And Warnings"
+                                   SizeDefinition="Middle" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
 
-            <!-- Term Bases Tab -->
-            <Fluent:RibbonTabItem Header="Term Bases">
-                <Fluent:RibbonGroupBox Header="TB">
-                    <Fluent:Button Header="Create TB"
-                                   SizeDefinition="Large" />
-                    <Fluent:Button Header="Import CSV"
-                                   SizeDefinition="Large" />
-                </Fluent:RibbonGroupBox>
-            </Fluent:RibbonTabItem>
-
-            <!-- QA Tab -->
-            <Fluent:RibbonTabItem Header="QA">
-                <Fluent:RibbonGroupBox Header="Quality Assurance">
-                    <Fluent:Button Header="Run QA"
-                                   SizeDefinition="Large" />
-                    <Fluent:Button Header="QA Settings"
-                                   SizeDefinition="Large" />
-                </Fluent:RibbonGroupBox>
-            </Fluent:RibbonTabItem>
+            <!-- Contextual Tab Groups -->
+            <Fluent:Ribbon.ContextualGroups>
+                <Fluent:RibbonContextualTabGroup x:Name="TranslationContextualGroup"
+                                                  Header="Translation Editor"
+                                                  Visibility="Collapsed"
+                                                  Background="#FF2B579A"
+                                                  BorderBrush="#FF2B579A" />
+            </Fluent:Ribbon.ContextualGroups>
         </Fluent:Ribbon>
 
         <!-- Main Content Area with AvalonDock -->
         <avalonDock:DockingManager Grid.Row="1" x:Name="DockManager">
             <avalonDock:LayoutRoot>
-                <avalonDock:LayoutPanel Orientation="Horizontal">
-                    <!-- Left: Document Panel (Translation Editor will go here) -->
-                    <avalonDock:LayoutDocumentPane>
-                        <avalonDock:LayoutDocument Title="Dashboard" CanClose="False">
-                            <ContentControl Content="{Binding CurrentView}" />
-                        </avalonDock:LayoutDocument>
-                        <avalonDock:LayoutDocument Title="Translation Editor" CanClose="False">
-                            <views:TranslationEditorView DataContext="{Binding EditorViewModel}" />
-                        </avalonDock:LayoutDocument>
-                    </avalonDock:LayoutDocumentPane>
+                <avalonDock:LayoutPanel Orientation="Vertical">
+                    <avalonDock:LayoutPanel Orientation="Horizontal">
+                        <!-- Center: Document pane (Translation Editor) -->
+                        <avalonDock:LayoutDocumentPane>
+                            <avalonDock:LayoutDocument Title="Dashboard" CanClose="False">
+                                <ContentControl Content="{Binding CurrentView}" />
+                            </avalonDock:LayoutDocument>
+                            <avalonDock:LayoutDocument Title="Translation Editor" CanClose="False">
+                                <views:TranslationEditorView DataContext="{Binding EditorViewModel}" />
+                            </avalonDock:LayoutDocument>
+                        </avalonDock:LayoutDocumentPane>
 
-                    <!-- Right: Anchorable Panels -->
-                    <avalonDock:LayoutAnchorablePane DockWidth="300">
-                        <avalonDock:LayoutAnchorable Title="Translation Results" CanClose="False">
-                            <TextBlock Text="Translation Results will appear here"
-                                       Padding="10" Foreground="Gray"
-                                       VerticalAlignment="Center" HorizontalAlignment="Center" />
-                        </avalonDock:LayoutAnchorable>
-                        <avalonDock:LayoutAnchorable Title="Term Base Matches" CanClose="False">
-                            <TextBlock Text="Term Base matches will appear here"
-                                       Padding="10" Foreground="Gray"
-                                       VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        <!-- Right: Translation Results -->
+                        <avalonDock:LayoutAnchorablePane DockWidth="320">
+                            <avalonDock:LayoutAnchorable Title="Translation Results"
+                                                         CanClose="False"
+                                                         CanHide="False"
+                                                         AutoHideWidth="320">
+                                <StackPanel Margin="8">
+                                    <TextBlock Text="Translation Results"
+                                               FontWeight="SemiBold" FontSize="13" Margin="0,0,0,8" />
+                                    <TextBlock Text="TM and term base matches will appear here when a segment is selected."
+                                               Foreground="Gray" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </avalonDock:LayoutAnchorable>
+                        </avalonDock:LayoutAnchorablePane>
+                    </avalonDock:LayoutPanel>
+
+                    <!-- Bottom: View Pane -->
+                    <avalonDock:LayoutAnchorablePane DockHeight="200">
+                        <avalonDock:LayoutAnchorable Title="View"
+                                                     CanClose="False"
+                                                     CanHide="True"
+                                                     AutoHideHeight="200">
+                            <TabControl>
+                                <TabItem Header="Preview">
+                                    <TextBlock Text="Document preview will appear here."
+                                               Foreground="Gray" Padding="10"
+                                               VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                </TabItem>
+                                <TabItem Header="Review/QA">
+                                    <TextBlock Text="QA results will appear here."
+                                               Foreground="Gray" Padding="10"
+                                               VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                </TabItem>
+                                <TabItem Header="Comments">
+                                    <TextBlock Text="Segment comments will appear here."
+                                               Foreground="Gray" Padding="10"
+                                               VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                </TabItem>
+                            </TabControl>
                         </avalonDock:LayoutAnchorable>
                     </avalonDock:LayoutAnchorablePane>
                 </avalonDock:LayoutPanel>
@@ -133,13 +239,51 @@
         </avalonDock:DockingManager>
 
         <!-- Status Bar -->
-        <StatusBar Grid.Row="2">
+        <StatusBar Grid.Row="2" Background="#F0F0F0">
             <StatusBarItem>
-                <TextBlock Text="{Binding StatusText}" />
+                <TextBlock>
+                    <Run Text="Doc: " Foreground="Gray" />
+                    <Run Text="{Binding EditorViewModel.DocumentCompletionPercent, Mode=OneWay, FallbackValue='--'}" />
+                    <Run Text="%" />
+                </TextBlock>
             </StatusBarItem>
             <Separator />
+            <StatusBarItem>
+                <TextBlock>
+                    <Run Text="TR: " Foreground="#4CAF50" />
+                    <Run Text="{Binding EditorViewModel.ConfirmedSegments, Mode=OneWay, FallbackValue='0'}" />
+                </TextBlock>
+            </StatusBarItem>
+            <Separator />
+            <StatusBarItem>
+                <TextBlock>
+                    <Run Text="Ed: " Foreground="#FF9800" />
+                    <Run Text="{Binding EditorViewModel.EditedSegments, Mode=OneWay, FallbackValue='0'}" />
+                </TextBlock>
+            </StatusBarItem>
+            <Separator />
+            <StatusBarItem>
+                <TextBlock>
+                    <Run Text="Empty: " Foreground="Gray" />
+                    <Run Text="{Binding EditorViewModel.EmptySegments, Mode=OneWay, FallbackValue='0'}" />
+                </TextBlock>
+            </StatusBarItem>
+            <Separator />
+            <StatusBarItem>
+                <TextBlock>
+                    <Run Text="Pre: " Foreground="#2196F3" />
+                    <Run Text="{Binding EditorViewModel.PreTranslatedSegments, Mode=OneWay, FallbackValue='0'}" />
+                </TextBlock>
+            </StatusBarItem>
+            <Separator />
+            <StatusBarItem>
+                <TextBlock>
+                    <Run Text="Total: " Foreground="Gray" />
+                    <Run Text="{Binding EditorViewModel.TotalSegments, Mode=OneWay, FallbackValue='0'}" />
+                </TextBlock>
+            </StatusBarItem>
             <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock Text="mehQ v0.1.0" />
+                <TextBlock Text="mehQ v0.1.0" Foreground="Gray" />
             </StatusBarItem>
         </StatusBar>
     </Grid>
