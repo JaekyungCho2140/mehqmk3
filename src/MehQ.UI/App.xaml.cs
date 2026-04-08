@@ -19,11 +19,18 @@ public partial class App : System.Windows.Application
         ConfigureServices(services);
 
         _serviceProvider = services.BuildServiceProvider();
+
+        var mainVm = _serviceProvider.GetRequiredService<ViewModels.MainViewModel>();
+        mainVm.EditorViewModel = _serviceProvider.GetRequiredService<ViewModels.TranslationEditorViewModel>();
+
+        var mainWindow = new Views.MainWindow { DataContext = mainVm };
+        mainWindow.Show();
     }
 
     private static void ConfigureServices(IServiceCollection services)
     {
         services.AddSingleton<ViewModels.MainViewModel>();
+        services.AddTransient<ViewModels.TranslationEditorViewModel>();
     }
 
     protected override void OnExit(ExitEventArgs e)

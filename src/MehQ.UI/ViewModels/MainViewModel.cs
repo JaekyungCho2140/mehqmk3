@@ -13,6 +13,9 @@ public partial class MainViewModel : ObservableObject
     [ObservableProperty]
     private object? _currentView;
 
+    [ObservableProperty]
+    private TranslationEditorViewModel? _editorViewModel;
+
     public ObservableCollection<Project> RecentProjects { get; } = [];
 
     [RelayCommand]
