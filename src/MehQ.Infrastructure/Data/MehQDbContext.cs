@@ -21,6 +21,7 @@ public class MehQDbContext : DbContext
         modelBuilder.Entity<Project>(e =>
         {
             e.HasKey(p => p.Id);
+            e.Property(p => p.Id).ValueGeneratedNever();
             e.HasMany(p => p.Documents).WithOne(d => d.Project).HasForeignKey(d => d.ProjectId);
             e.HasMany(p => p.TranslationMemories).WithMany();
             e.HasMany(p => p.TermBases).WithMany();
@@ -29,12 +30,14 @@ public class MehQDbContext : DbContext
         modelBuilder.Entity<TranslationDocument>(e =>
         {
             e.HasKey(d => d.Id);
+            e.Property(d => d.Id).ValueGeneratedNever();
             e.HasMany(d => d.Segments).WithOne(s => s.Document).HasForeignKey(s => s.DocumentId);
         });
 
         modelBuilder.Entity<Segment>(e =>
         {
             e.HasKey(s => s.Id);
+            e.Property(s => s.Id).ValueGeneratedNever();
             e.Ignore(s => s.SourceTags);
             e.Ignore(s => s.TargetTags);
         });
@@ -42,35 +45,41 @@ public class MehQDbContext : DbContext
         modelBuilder.Entity<TranslationMemory>(e =>
         {
             e.HasKey(tm => tm.Id);
+            e.Property(tm => tm.Id).ValueGeneratedNever();
             e.HasMany(tm => tm.Entries).WithOne(entry => entry.TranslationMemory).HasForeignKey(entry => entry.TranslationMemoryId);
         });
 
         modelBuilder.Entity<TmEntry>(e =>
         {
             e.HasKey(entry => entry.Id);
+            e.Property(entry => entry.Id).ValueGeneratedNever();
             e.HasIndex(entry => entry.Source);
         });
 
         modelBuilder.Entity<TermBase>(e =>
         {
             e.HasKey(tb => tb.Id);
+            e.Property(tb => tb.Id).ValueGeneratedNever();
             e.HasMany(tb => tb.Terms).WithOne(t => t.TermBase).HasForeignKey(t => t.TermBaseId);
         });
 
         modelBuilder.Entity<Term>(e =>
         {
             e.HasKey(t => t.Id);
+            e.Property(t => t.Id).ValueGeneratedNever();
         });
 
         modelBuilder.Entity<LiveDocsCorpus>(e =>
         {
             e.HasKey(c => c.Id);
+            e.Property(c => c.Id).ValueGeneratedNever();
             e.HasMany(c => c.AlignedPairs).WithOne(p => p.Corpus).HasForeignKey(p => p.CorpusId);
         });
 
         modelBuilder.Entity<AlignedPair>(e =>
         {
             e.HasKey(p => p.Id);
+            e.Property(p => p.Id).ValueGeneratedNever();
         });
     }
 }
