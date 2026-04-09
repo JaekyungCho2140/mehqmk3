@@ -21,13 +21,14 @@
         <!-- Quick Actions -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,20">
             <Button Content="New Project" Padding="15,8" Margin="0,0,10,0"
-                    Background="#2B579A" Foreground="White" BorderThickness="0" />
+                    Background="#2B579A" Foreground="White" BorderThickness="0"
+                    Command="{Binding DataContext.CreateProjectCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
             <Button Content="Open Project" Padding="15,8" Margin="0,0,10,0" />
         </StackPanel>
 
         <!-- Recent Projects List -->
         <GroupBox Grid.Row="2" Header="Recent Projects" Padding="10">
-            <ListView ItemsSource="{Binding RecentProjects}">
+            <ListView ItemsSource="{Binding DataContext.RecentProjects, RelativeSource={RelativeSource AncestorType=Window}}">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" Width="250"

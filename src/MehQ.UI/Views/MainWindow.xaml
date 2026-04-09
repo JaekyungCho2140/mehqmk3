@@ -36,6 +36,7 @@
             <Fluent:RibbonTabItem Header="Project">
                 <Fluent:RibbonGroupBox Header="Project">
                     <Fluent:Button Header="New"
+                                   Command="{Binding CreateProjectCommand}"
                                    SizeDefinition="Large" />
                     <Fluent:Button Header="Open"
                                    SizeDefinition="Large" />
@@ -44,8 +45,10 @@
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Import/Export">
                     <Fluent:Button Header="Import"
+                                   Command="{Binding EditorViewModel.OpenDocumentCommand}"
                                    SizeDefinition="Large" />
                     <Fluent:Button Header="Export"
+                                   Command="{Binding EditorViewModel.SaveDocumentCommand}"
                                    SizeDefinition="Large" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
@@ -54,10 +57,12 @@
             <Fluent:RibbonTabItem Header="Documents">
                 <Fluent:RibbonGroupBox Header="Documents">
                     <Fluent:Button Header="Import"
+                                   Command="{Binding EditorViewModel.OpenDocumentCommand}"
                                    SizeDefinition="Large" />
                     <Fluent:Button Header="Translate"
                                    SizeDefinition="Large" />
                     <Fluent:Button Header="Export"
+                                   Command="{Binding EditorViewModel.SaveDocumentCommand}"
                                    SizeDefinition="Large" />
                     <Fluent:Button Header="Remove"
                                    SizeDefinition="Large" />
@@ -85,6 +90,9 @@
                                    SizeDefinition="Large" />
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Operations">
+                    <Fluent:Button Header="Run QA"
+                                   Command="{Binding EditorViewModel.RunQaCommand}"
+                                   SizeDefinition="Middle" />
                     <Fluent:Button Header="Copy Source"
                                    SizeDefinition="Middle" />
                     <Fluent:Button Header="Pseudo-Translate"
@@ -148,6 +156,7 @@
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="Store">
                     <Fluent:Button Header="Confirm"
+                                   Command="{Binding EditorViewModel.ConfirmSegmentCommand}"
                                    SizeDefinition="Large" />
                     <Fluent:Button Header="Add Term"
                                    SizeDefinition="Middle" />
@@ -199,12 +208,49 @@
                                                          CanClose="False"
                                                          CanHide="False"
                                                          AutoHideWidth="320">
-                                <StackPanel Margin="8">
-                                    <TextBlock Text="Translation Results"
-                                               FontWeight="SemiBold" FontSize="13" Margin="0,0,0,8" />
-                                    <TextBlock Text="TM and term base matches will appear here when a segment is selected."
-                                               Foreground="Gray" TextWrapping="Wrap" />
-                                </StackPanel>
+                                <Grid DataContext="{Binding EditorViewModel}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+
+                                    <!-- TM Matches -->
+                                    <TextBlock Grid.Row="0" Text="TM Matches" FontWeight="SemiBold" Padding="8,4" Background="#F5F5F5" />
+                                    <ListBox Grid.Row="1" ItemsSource="{Binding TmMatches}" BorderThickness="0">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Margin="4,2">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <Border Background="#E53935" CornerRadius="2" Padding="4,1" Margin="0,0,6,0">
+                                                            <TextBlock Text="{Binding MatchRate, StringFormat={}{0}%}" Foreground="White" FontSize="11" FontWeight="Bold" />
+                                                        </Border>
+                                                        <TextBlock Text="{Binding Entry.Source}" FontSize="12" TextTrimming="CharacterEllipsis" />
+                                                    </StackPanel>
+                                                    <TextBlock Text="{Binding Entry.Target}" FontSize="12" Foreground="#1565C0" Margin="0,2,0,0" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+
+                                    <!-- TB Matches -->
+                                    <TextBlock Grid.Row="2" Text="Term Base" FontWeight="SemiBold" Padding="8,4" Background="#F5F5F5" />
+                                    <ListBox Grid.Row="3" ItemsSource="{Binding TermMatches}" BorderThickness="0">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal" Margin="4,2">
+                                                    <Border Background="#1565C0" CornerRadius="2" Padding="4,1" Margin="0,0,6,0">
+                                                        <TextBlock Text="TB" Foreground="White" FontSize="10" />
+                                                    </Border>
+                                                    <TextBlock Text="{Binding Term.SourceTerm}" FontSize="12" Margin="0,0,8,0" />
+                                                    <TextBlock Text="&#x2192;" Foreground="Gray" Margin="0,0,8,0" />
+                                                    <TextBlock Text="{Binding Term.TargetTerm}" FontSize="12" Foreground="#1565C0" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </Grid>
                             </avalonDock:LayoutAnchorable>
                         </avalonDock:LayoutAnchorablePane>
                     </avalonDock:LayoutPanel>
@@ -215,23 +261,27 @@
                                                      CanClose="False"
                                                      CanHide="True"
                                                      AutoHideHeight="200">
-                            <TabControl>
-                                <TabItem Header="Preview">
-                                    <TextBlock Text="Document preview will appear here."
-                                               Foreground="Gray" Padding="10"
-                                               VerticalAlignment="Center" HorizontalAlignment="Center" />
-                                </TabItem>
-                                <TabItem Header="Review/QA">
-                                    <TextBlock Text="QA results will appear here."
-                                               Foreground="Gray" Padding="10"
-                                               VerticalAlignment="Center" HorizontalAlignment="Center" />
-                                </TabItem>
-                                <TabItem Header="Comments">
-                                    <TextBlock Text="Segment comments will appear here."
-                                               Foreground="Gray" Padding="10"
-                                               VerticalAlignment="Center" HorizontalAlignment="Center" />
-                                </TabItem>
-                            </TabControl>
+                            <Grid DataContext="{Binding EditorViewModel}">
+                                <TabControl>
+                                    <TabItem Header="QA Warnings">
+                                        <DataGrid ItemsSource="{Binding QaWarnings}" AutoGenerateColumns="False"
+                                                  IsReadOnly="True" BorderThickness="0" GridLinesVisibility="Horizontal"
+                                                  HorizontalGridLinesBrush="#E0E0E0">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="#" Width="40" Binding="{Binding SequenceNumber}" />
+                                                <DataGridTextColumn Header="Severity" Width="70" Binding="{Binding Severity}" />
+                                                <DataGridTextColumn Header="Category" Width="120" Binding="{Binding Category}" />
+                                                <DataGridTextColumn Header="Code" Width="70" Binding="{Binding Code}" />
+                                                <DataGridTextColumn Header="Message" Width="*" Binding="{Binding Message}" />
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                    </TabItem>
+                                    <TabItem Header="Preview">
+                                        <TextBlock Text="Document preview will appear here" Padding="10" Foreground="Gray"
+                                                   VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                    </TabItem>
+                                </TabControl>
+                            </Grid>
                         </avalonDock:LayoutAnchorable>
                     </avalonDock:LayoutAnchorablePane>
                 </avalonDock:LayoutPanel>
@@ -243,7 +293,7 @@
             <StatusBarItem>
                 <TextBlock>
                     <Run Text="Doc: " Foreground="Gray" />
-                    <Run Text="{Binding EditorViewModel.DocumentCompletionPercent, Mode=OneWay, FallbackValue='--'}" />
+                    <Run Text="{Binding EditorViewModel.CompletionPercentage, Mode=OneWay, FallbackValue='--'}" />
                     <Run Text="%" />
                 </TextBlock>
             </StatusBarItem>
