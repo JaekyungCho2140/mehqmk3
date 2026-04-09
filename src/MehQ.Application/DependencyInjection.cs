@@ -12,6 +12,7 @@ public static class DependencyInjection
         services.AddTransient<Services.ProjectService>();
         services.AddTransient<Services.TranslationMemoryService>();
         services.AddTransient<Services.TermBaseService>();
+        services.AddTransient<Services.QaService>();
         return services;
     }
 }
