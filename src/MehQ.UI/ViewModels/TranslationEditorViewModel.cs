@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MehQ.Application.Services;
 using MehQ.Core.Enums;
 using MehQ.Core.Interfaces;
 using MehQ.Core.Models;
@@ -10,6 +11,11 @@ namespace MehQ.UI.ViewModels;
 public partial class TranslationEditorViewModel : ObservableObject
 {
     private readonly IDocumentService _documentService;
+    private readonly TranslationMemoryService? _tmService;
+    private readonly TermBaseService? _tbService;
+    private readonly QaService? _qaService;
+    private Guid? _activeTmId;
+    private Guid? _activeTbId;
 
     [ObservableProperty]
     private TranslationDocument? _document;
@@ -41,11 +47,66 @@ public partial class TranslationEditorViewModel : ObservableObject
     [ObservableProperty]
     private int _preTranslatedSegments;
 
-    public ObservableCollection<Segment> Segments { get; } = [];
+    [ObservableProperty]
+    private int _qaErrorCount;
 
-    public TranslationEditorViewModel(IDocumentService documentService)
+    [ObservableProperty]
+    private int _completionPercentage;
+
+    public ObservableCollection<Segment> Segments { get; } = [];
+    public ObservableCollection<TmMatch> TmMatches { get; } = [];
+    public ObservableCollection<TermMatch> TermMatches { get; } = [];
+    public ObservableCollection<QaWarning> QaWarnings { get; } = [];
+
+    public TranslationEditorViewModel(IDocumentService documentService,
+        TranslationMemoryService? tmService = null,
+        TermBaseService? tbService = null,
+        QaService? qaService = null)
     {
         _documentService = documentService;
+        _tmService = tmService;
+        _tbService = tbService;
+        _qaService = qaService;
+    }
+
+    public void SetActiveTm(Guid tmId) => _activeTmId = tmId;
+    public void SetActiveTb(Guid tbId) => _activeTbId = tbId;
+
+    partial void OnSelectedSegmentChanged(Segment? value)
+    {
+        if (value != null)
+        {
+            _ = LookupMatchesAsync(value);
+        }
+    }
+
+    private async Task LookupMatchesAsync(Segment segment)
+    {
+        // TM lookup
+        TmMatches.Clear();
+        if (_tmService != null && _activeTmId.HasValue)
+        {
+            try
+            {
+                var matches = await _tmService.LookupAsync(_activeTmId.Value, segment.Source);
+                foreach (var m in matches)
+                    TmMatches.Add(m);
+            }
+            catch { /* TM not available yet */ }
+        }
+
+        // TB lookup
+        TermMatches.Clear();
+        if (_tbService != null && _activeTbId.HasValue)
+        {
+            try
+            {
+                var matches = await _tbService.LookupTermsAsync(_activeTbId.Value, segment.Source);
+                foreach (var m in matches)
+                    TermMatches.Add(m);
+            }
+            catch { /* TB not available yet */ }
+        }
     }
 
     [RelayCommand]
@@ -109,13 +170,19 @@ public partial class TranslationEditorViewModel : ObservableObject
     private void ConfirmSegment()
     {
         if (SelectedSegment == null) return;
+        if (string.IsNullOrWhiteSpace(SelectedSegment.Target)) return;
 
-        if (!string.IsNullOrWhiteSpace(SelectedSegment.Target))
+        SelectedSegment.Status = SegmentStatus.TranslatorConfirmed;
+        UpdateStats();
+
+        // Store confirmed pair in TM
+        if (_tmService != null && _activeTmId.HasValue)
         {
-            SelectedSegment.Status = SegmentStatus.TranslatorConfirmed;
-            UpdateStats();
-            MoveToNextSegment();
+            _ = _tmService.StoreEntryAsync(_activeTmId.Value,
+                SelectedSegment.Source, SelectedSegment.Target);
         }
+
+        MoveToNextSegment();
     }
 
     // Keyboard shortcut: Ctrl+E
@@ -162,6 +229,22 @@ public partial class TranslationEditorViewModel : ObservableObject
         }
     }
 
+    [RelayCommand]
+    private async Task RunQaAsync()
+    {
+        if (Segments.Count == 0) return;
+
+        QaWarnings.Clear();
+        var warnings = await (_qaService?.RunQaAsync(
+            Segments.ToList(), _activeTbId) ?? Task.FromResult<IReadOnlyList<QaWarning>>([]));
+
+        foreach (var w in warnings)
+            QaWarnings.Add(w);
+
+        QaErrorCount = warnings.Count;
+        StatusText = $"QA complete: {warnings.Count} issues found";
+    }
+
     private void UpdateStats()
     {
         TotalSegments = Segments.Count;
@@ -170,5 +253,7 @@ public partial class TranslationEditorViewModel : ObservableObject
         PreTranslatedSegments = Segments.Count(s => s.Status == SegmentStatus.PreTranslated);
         TranslatedSegments = Segments.Count(s => s.Status >= SegmentStatus.TranslatorConfirmed);
         ConfirmedSegments = Segments.Count(s => s.Status >= SegmentStatus.TranslatorConfirmed);
+        CompletionPercentage = TotalSegments == 0 ? 0 :
+            (int)Math.Round(100.0 * ConfirmedSegments / TotalSegments);
     }
 }
