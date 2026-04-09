@@ -13,6 +13,7 @@ public static class DependencyInjection
         services.AddTransient<Services.TranslationMemoryService>();
         services.AddTransient<Services.TermBaseService>();
         services.AddTransient<Services.QaService>();
+        services.AddTransient<Services.LiveDocsService>();
         return services;
     }
 }
