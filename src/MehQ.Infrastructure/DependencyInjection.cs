@@ -13,6 +13,7 @@ public static class DependencyInjection
     {
         services.AddDbContext<MehQDbContext>(options =>
             options.UseSqlite("Data Source=mehq.db"));
+        services.AddScoped<IProjectRepository, ProjectRepository>();
         services.AddScoped<ITranslationMemoryRepository, TranslationMemoryRepository>();
         services.AddScoped<ITermBaseRepository, TermBaseRepository>();
 
