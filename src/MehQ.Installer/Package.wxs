@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="mehQ"
+           Manufacturer="mehQ Project"
+           Version="0.1.0"
+           UpgradeCode="E7A3B8C1-5D4F-4A2E-9B1C-3F8D6E2A7B4C">
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of mehQ is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <!-- Installation directory -->
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="INSTALLFOLDER" Name="mehQ">
+        <Component Id="MainExecutable" Guid="A1B2C3D4-E5F6-7890-ABCD-EF1234567890">
+          <File Id="MehQExe" Source="$(var.MehQ.UI.TargetDir)MehQ.UI.exe" KeyPath="yes" />
+          <File Id="MehQDll" Source="$(var.MehQ.UI.TargetDir)MehQ.UI.dll" />
+          <File Id="CoreDll" Source="$(var.MehQ.UI.TargetDir)MehQ.Core.dll" />
+          <File Id="AppDll" Source="$(var.MehQ.UI.TargetDir)MehQ.Application.dll" />
+          <File Id="InfraDll" Source="$(var.MehQ.UI.TargetDir)MehQ.Infrastructure.dll" />
+        </Component>
+
+        <!-- Desktop shortcut -->
+        <Component Id="DesktopShortcut" Guid="B2C3D4E5-F6A7-8901-BCDE-F23456789012">
+          <Shortcut Id="DesktopShortcut"
+                    Name="mehQ"
+                    Description="mehQ - Computer-Assisted Translation"
+                    Target="[INSTALLFOLDER]MehQ.UI.exe"
+                    WorkingDirectory="INSTALLFOLDER"
+                    Directory="DesktopFolder" />
+          <RegistryValue Root="HKCU" Key="Software\mehQ" Name="DesktopShortcut" Type="integer" Value="1" KeyPath="yes" />
+        </Component>
+
+        <!-- Start Menu shortcut -->
+        <Component Id="StartMenuShortcut" Guid="C3D4E5F6-A7B8-9012-CDEF-345678901234">
+          <Shortcut Id="StartMenuShortcut"
+                    Name="mehQ"
+                    Description="mehQ - Computer-Assisted Translation"
+                    Target="[INSTALLFOLDER]MehQ.UI.exe"
+                    WorkingDirectory="INSTALLFOLDER"
+                    Directory="ProgramMenuFolder" />
+          <RegistryValue Root="HKCU" Key="Software\mehQ" Name="StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+
+    <!-- Standard directories for shortcuts -->
+    <StandardDirectory Id="DesktopFolder" />
+    <StandardDirectory Id="ProgramMenuFolder" />
+
+    <!-- Features -->
+    <Feature Id="ProductFeature" Title="mehQ" Level="1">
+      <ComponentRef Id="MainExecutable" />
+      <ComponentRef Id="DesktopShortcut" />
+      <ComponentRef Id="StartMenuShortcut" />
+    </Feature>
+
+  </Package>
+</Wix>

@@ -19,6 +19,9 @@ jobs:
         with:
           dotnet-version: '8.0.x'
 
+      - name: Install WiX Toolset
+        run: dotnet tool install --global wix
+
       - name: Restore dependencies
         run: dotnet restore mehQ.sln
 
@@ -31,6 +34,10 @@ jobs:
       - name: Publish
         run: dotnet publish src/MehQ.UI/MehQ.UI.csproj --configuration Release --output ./publish --self-contained false
 
+      - name: Build Installer
+        run: dotnet build src/MehQ.Installer/MehQ.Installer.wixproj --configuration Release
+        continue-on-error: true
+
       - name: Create Release Archive
         run: Compress-Archive -Path ./publish/* -DestinationPath ./mehQ-${{ github.ref_name }}.zip
         shell: pwsh
@@ -38,5 +45,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: ./mehQ-${{ github.ref_name }}.zip
+          files: |
+            ./mehQ-${{ github.ref_name }}.zip
+            ./src/MehQ.Installer/bin/Release/**/*.msi
           generate_release_notes: true
