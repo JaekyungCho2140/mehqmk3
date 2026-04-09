@@ -2,6 +2,7 @@ using System.Windows;
 using MehQ.Application;
 using MehQ.Application.Services;
 using MehQ.Infrastructure;
+using MehQ.Infrastructure.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace MehQ.UI;
@@ -26,6 +27,8 @@ public partial class App : System.Windows.Application
 
         var mainWindow = new Views.MainWindow { DataContext = mainVm };
         mainWindow.Show();
+
+        mainVm.StatusText = $"mehQ v{AutoUpdateService.GetCurrentVersion()} — Ready";
     }
 
     private static void ConfigureServices(IServiceCollection services)
