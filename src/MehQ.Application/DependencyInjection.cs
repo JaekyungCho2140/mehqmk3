@@ -10,6 +10,7 @@ public static class DependencyInjection
     {
         services.AddTransient<IDocumentService, DocumentService>();
         services.AddTransient<Services.TranslationMemoryService>();
+        services.AddTransient<Services.TermBaseService>();
         return services;
     }
 }
