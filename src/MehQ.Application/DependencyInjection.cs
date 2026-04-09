@@ -9,6 +9,7 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddTransient<IDocumentService, DocumentService>();
+        services.AddTransient<Services.ProjectService>();
         services.AddTransient<Services.TranslationMemoryService>();
         services.AddTransient<Services.TermBaseService>();
         return services;
