@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MehQ.Application.Tests", "t
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MehQ.Infrastructure.Tests", "tests\MehQ.Infrastructure.Tests\MehQ.Infrastructure.Tests.csproj", "{B1000001-0000-0000-0000-000000000007}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MehQ.Integration.Tests", "tests\MehQ.Integration.Tests\MehQ.Integration.Tests.csproj", "{B1000001-0000-0000-0000-000000000008}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{B1000001-0000-0000-0000-000000000007}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1000001-0000-0000-0000-000000000007}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1000001-0000-0000-0000-000000000007}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1000001-0000-0000-0000-000000000008}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1000001-0000-0000-0000-000000000008}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1000001-0000-0000-0000-000000000008}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1000001-0000-0000-0000-000000000008}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B1000001-0000-0000-0000-000000000001} = {A1B2C3D4-0001-0001-0001-000000000001}
@@ -64,5 +70,6 @@ Global
 		{B1000001-0000-0000-0000-000000000005} = {A1B2C3D4-0001-0001-0001-000000000002}
 		{B1000001-0000-0000-0000-000000000006} = {A1B2C3D4-0001-0001-0001-000000000002}
 		{B1000001-0000-0000-0000-000000000007} = {A1B2C3D4-0001-0001-0001-000000000002}
+		{B1000001-0000-0000-0000-000000000008} = {A1B2C3D4-0001-0001-0001-000000000002}
 	EndGlobalSection
 EndGlobal
