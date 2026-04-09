@@ -11,6 +11,8 @@ public class MehQDbContext : DbContext
     public DbSet<TmEntry> TmEntries => Set<TmEntry>();
     public DbSet<TermBase> TermBases => Set<TermBase>();
     public DbSet<Term> Terms => Set<Term>();
+    public DbSet<LiveDocsCorpus> LiveDocsCorpora => Set<LiveDocsCorpus>();
+    public DbSet<AlignedPair> AlignedPairs => Set<AlignedPair>();
 
     public MehQDbContext(DbContextOptions<MehQDbContext> options) : base(options) { }
 
@@ -58,6 +60,17 @@ public class MehQDbContext : DbContext
         modelBuilder.Entity<Term>(e =>
         {
             e.HasKey(t => t.Id);
+        });
+
+        modelBuilder.Entity<LiveDocsCorpus>(e =>
+        {
+            e.HasKey(c => c.Id);
+            e.HasMany(c => c.AlignedPairs).WithOne(p => p.Corpus).HasForeignKey(p => p.CorpusId);
+        });
+
+        modelBuilder.Entity<AlignedPair>(e =>
+        {
+            e.HasKey(p => p.Id);
         });
     }
 }

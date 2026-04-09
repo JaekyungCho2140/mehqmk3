@@ -16,6 +16,7 @@ public static class DependencyInjection
         services.AddScoped<IProjectRepository, ProjectRepository>();
         services.AddScoped<ITranslationMemoryRepository, TranslationMemoryRepository>();
         services.AddScoped<ITermBaseRepository, TermBaseRepository>();
+        services.AddScoped<ILiveDocsRepository, LiveDocsRepository>();
 
         services.AddSingleton<IFileParser, XliffParser>();
         services.AddSingleton<IFileParser, DocxParser>();
